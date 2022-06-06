@@ -1,0 +1,41 @@
+<?doctype html>
+<html>
+<head>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"/>
+<link rel="stylesheet" href="style.css"/>
+<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+<script src="https://unpkg.com/protomaps@latest/dist/protomaps.min.js"></script>
+</head>
+<body>
+<div id="map">
+<script>
+let map = L.map("map").setView([35.675, 139.773], 16)
+protomaps.leafletLayer({
+  url: 'https://maps.gsi.go.jp/xyz/experimental_bvmap/{z}/{x}/{y}.pbf',
+  paint_rules: [
+{
+  dataLayer: 'waterarea',
+  symbolizer: new protomaps.PolygonSymbolizer({
+    fill: 'steelblue'
+  })
+},
+{
+  dataLayer: 'contour',
+  symbolizer: new protomaps.LineSymbolizer({
+    color: '#c8a03c'
+  })
+},
+{
+  dataLayer: 'building',
+  symbolizer: new protomaps.PolygonSymbolizer({
+    fill: '#888'
+  })
+}
+  ],
+  label_rules: [
+  ] 
+}).addTo(map)
+</script>
+</body>
+</html>
+
