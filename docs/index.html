@@ -5,18 +5,28 @@
 <link rel="stylesheet" href="style.css"/>
 <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
 <script src="https://unpkg.com/protomaps@latest/dist/protomaps.min.js"></script>
+<script src="https://unpkg.com/leaflet-hash@0.2.1/leaflet-hash.js"></script>
 </head>
 <body>
 <div id="map">
 <script>
 let map = L.map("map").setView([35.675, 139.773], 16)
+L.hash(map)
 protomaps.leafletLayer({
   url: 'https://maps.gsi.go.jp/xyz/experimental_bvmap/{z}/{x}/{y}.pbf',
+  attribution: 'GSI | <a href="https://github.com/protomaps/protomaps.js">protomaps.js</a>',
+  maxDataZoom: 16,
   paint_rules: [
 {
   dataLayer: 'waterarea',
   symbolizer: new protomaps.PolygonSymbolizer({
     fill: 'steelblue'
+  })
+},
+{
+  dataLayer: 'coastline',
+  symbolizer: new protomaps.LineSymbolizer({
+    color: 'steelblue'
   })
 },
 {
@@ -26,9 +36,32 @@ protomaps.leafletLayer({
   })
 },
 {
+  dataLayer: 'boundary',
+  symbolizer: new protomaps.LineSymbolizer({
+    color: (z, f) => {
+      if (f.props.ftCode == 6101) {
+        return 'green'
+      } else {
+        return 'red'
+      }
+    }
+  })
+},
+{
+  dataLayer: 'road',
+  symbolizer: new protomaps.LineSymbolizer({
+    color: 'gray',
+    width: (z, f) => {
+      return Math.random() * 4
+    }
+  })
+},
+{
   dataLayer: 'building',
   symbolizer: new protomaps.PolygonSymbolizer({
-    fill: '#888'
+    fill: (z, f) => {
+      return ['yellow', 'blue'][Math.floor(Math.random() * 2)]
+    }
   })
 }
   ],
